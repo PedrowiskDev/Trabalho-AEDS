@@ -1,7 +1,7 @@
 # Sprint 1
 
 ## Daily scrum:
-![Screenshot](screenshot-02/12.png)
+![Screenshot](../IMG/screenshot-0212.png)
 Data: 
 02/12 <br>
 inicio - 11:40 <br>
