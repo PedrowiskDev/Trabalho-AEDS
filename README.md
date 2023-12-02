@@ -3,7 +3,7 @@
 ## Integrantes
 
 • Pedro Henrique Caetano Soares 
-
+• Rafael Caetano da Silva
 ## Objetivo
 
 O objetivo deste trabalho é desenvolver um sistema para gerenciar uma loja de veículos em
