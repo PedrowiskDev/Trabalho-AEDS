@@ -1,58 +1,42 @@
-#include <ordenar.h>
+#include "ordenar.h"
 
-char *ordenar (int escolhaFiltro) {
-    bool opcaoValida = false;
-    bool cancelarOperacao = false;
+void ordenar (Veiculo *veiculos, bool *cancelarOperacao) {
+    bool escolhaValida = false;
 
-    printf("1. Veículo mais barato\n");
-    printf("2. Veículo mais caro\n");
+    printf("1. veiculo mais barato\n");
+    printf("2. veiculo mais caro\n");
     printf("3. Ordem alfabética\n");
     printf("4. Cancelar\n");
-    printf("\nPor favor, escolha uma opção de ordenação de busca de veículo: ");
+    printf("\nPor favor, escolha uma opcao de ordenacao de busca de veiculo: ");
 
-    int opcaoOrdenacao;
-    scanf("%d", &opcaoOrdenacao);
+    int escolhaOrdenacao;
+    scanf("%d", &escolhaOrdenacao);
     limpar();
 
     do {
-        switch (opcaoOrdenacao) {
+        switch (escolhaOrdenacao) {
             case 1:
-                opcaoValida;
-                // Abrir arquivo `veiculos_estoque.csv`
-                // Filtrar de acordo com `escolhaFiltro`
-                // Ordenar os resultados de acordo com `opcaoOrdenacao`
-                // Exibir no terminal
-                // Fechar arquivo
+                escolhaValida;
+                // Ordenar `veiculos` de acordo
                 break;
 
             case 2:
-                opcaoValida;
-                // Abrir arquivo `veiculos_estoque.csv`
-                // Filtrar de acordo com `escolhaFiltro`
-                // Ordenar os resultados de acordo com `opcaoOrdenacao`
-                // Exibir no terminal
-                // Fechar arquivo
+                escolhaValida;
+                // Ordenar `veiculos` de acordo
                 break;
 
             case 3:
-                opcaoValida;
-                // Abrir arquivo `veiculos_estoque.csv`
-                // Filtrar de acordo com `escolhaFiltro`
-                // Ordenar os resultados de acordo com `opcaoOrdenacao`
-                // Exibir no terminal
-                // Fechar arquivo
+                escolhaValida;
+                // Ordenar `veiculos` de acordo
                 break;
 
             case 4:
-                opcaoValida;
-                cancelarOperacao = true;
-                break;
+                *cancelarOperacao = true;
+                return;
 
             default:
-                printf("Opção inválida: por favor, digite um número entre 1 e 4 que corresponda à opção desejada.\n\n");
+                printf("Opcao inválida: por favor, digite um número entre 1 e 4 que corresponda à opcao desejada.\n\n");
                 break;
         }
-    } while (!opcaoValida);
-
-    return cancelarOperacao;
+    } while (!escolhaValida);
 }
