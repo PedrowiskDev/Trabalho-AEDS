@@ -1,3 +1,11 @@
+#ifndef STRUCTS_H
+#define STRUCTS_H
+
+typedef struct {
+    char *marca;
+    float taxa;
+} Marca;
+
 typedef struct {
     Marca marca;
     char *modelo;
@@ -5,7 +13,4 @@ typedef struct {
     float preco;
 } Veiculo;
 
-typedef struct {
-    char *marca;
-    float taxa;
-} Marca;
+#endif
