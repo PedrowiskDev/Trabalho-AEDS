@@ -33,15 +33,15 @@ int main () {
         if (!cancelarOperacao) {
             switch(opcao) {
                 case 1:
-                    //compra(resultadoBusca);
+                    compra();
                     break;
 
                 case 2:
-                    //venda(resultadoBusca);
+                    venda();
                     break;
 
                 case 3:
-                    //alterarDados(resultadoBusca);
+                    alterarDados();
                     break;
 
                 case 4:
