@@ -10,12 +10,6 @@ typedef struct {
     float preco;
 } Veiculo;
 
-typedef struct {
-    char marca[50];
-    char modelo[50];
-    float preco;
-} Veiculo;
-
 void registrarVenda(const Veiculo* veiculo) {
     FILE* arquivoVendas = fopen("historico_vendas.csv", "a");
     if (arquivoVendas == NULL) {
@@ -39,7 +33,12 @@ void registrarVenda(const Veiculo* veiculo) {
 void venda() {
     bool cancelarOperacao = false;
     Veiculo* resultadoBusca = buscar(2, &cancelarOperacao);
-
+if (!cancelarOperacao && resultadoBusca != NULL) {
+        float taxa;
+        printf("Digite a taxa de compra (em decimal): ");
+        scanf("%f", &taxa);
+        limpar();
+}
     if (!cancelarOperacao && resultadoBusca != NULL) {
         Veiculo veiculoVendido = *resultadoBusca;
         registrarVenda(&veiculoVendido);
