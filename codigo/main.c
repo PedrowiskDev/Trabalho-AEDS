@@ -6,6 +6,7 @@
 #include "utils.h"
 #include "structs.h"
 #include "buscar.h"
+#include "relatorio.h"
 
 int main () {
     printf("VrumVrum Corporation ©\n\n");
@@ -33,19 +34,19 @@ int main () {
         if (!cancelarOperacao) {
             switch(opcao) {
                 case 1:
-                    //compra(resultadoBusca);
+                    compra();
                     break;
 
                 case 2:
-                    //venda(resultadoBusca);
+                    venda();
                     break;
 
                 case 3:
-                    //alterarDados(resultadoBusca);
+                    alterarDados();
                     break;
 
                 case 4:
-                    //gerarExtrato();
+                    gerarExtrato();
                     break;
 
                 case 5:
