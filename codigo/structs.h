@@ -2,7 +2,7 @@
 #define STRUCTS_H
 
 typedef struct {
-    char *marca;
+    char *nome;
     float taxa;
 } Marca;
 

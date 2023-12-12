@@ -18,17 +18,17 @@ Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao) {
     do {
         switch (escolhaFiltro) {
             case 1:
-                escolhaValida;
-                strcpy(opcaoFiltro, "marca");
+                escolhaValida = true;
+                strcpy(opcaoFiltro, "marca"); // substituir por sprintf(vetor, "marca");
                 break;
 
             case 2:
-                escolhaValida;
+                escolhaValida = true;
                 strcpy(opcaoFiltro, "modelo");
                 break;
 
             case 3:
-                escolhaValida;
+                escolhaValida = true;
                 strcpy(opcaoFiltro, "cor");
                 break;
 
@@ -37,7 +37,7 @@ Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao) {
                 return NULL;
 
             default:
-                printf("\n\nOpcao inválida: por favor, digite um número entre 1 e 4 que corresponda à opcao desejada.\n\n");
+                printf("\n\nOpcao invalida: por favor, digite um numero entre 1 e 4 que corresponda a opcao desejada.\n\n");
                 break;
         }
     } while (!escolhaValida);
@@ -46,7 +46,7 @@ Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao) {
     char aux[255];
     bool sucessoBusca = false;
 
-    FILE *veiculos_estoque = fopen ("arquivos\veiculos_estoque.csv", "r");
+    FILE *veiculos_estoque = fopen ("./arquivos/veiculos_estoque.csv", "r");
 
     if (veiculos_estoque == NULL) {
         printf("Ocorreu um erro ao abrir o arquivo.");
@@ -56,37 +56,48 @@ Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao) {
 
         char *filtro = (char*)malloc(255 * sizeof(char));
         printf("Por favor, digite uma opcao de %s: ", opcaoFiltro);
-        scanf("%s ", filtro); // Usuário digita uma opcao de marca/modelo/cor
+        scanf("%s", filtro); // Usuario digita uma opcao de marca/modelo/cor
+        fflush(stdin);
 
-        while(fgets(aux, sizeof(aux), veiculos_estoque)) { // Percorrer o arquivo procurando por strings que correspondam ao que o usuário digitou
-            char *token = strtok(aux, ";"); // Seleciona as marcas de veiculo no arquivo `veiculos_estoque.csv`
+        while(fgets(aux, sizeof(aux), veiculos_estoque) != NULL) { // Percorrer o arquivo procurando por strings que correspondam ao que o usuario digitou
+            char *token = strtok(aux, ",");
+
+            Veiculo veiculoMatch; // Armazena os dados do veiculo do filtro correspondente em um "objeto" da "classe" `Veiculo`
+
+            veiculoMatch.marca.nome = token;
+            veiculoMatch.modelo = strtok(NULL, ",");
+            veiculoMatch.cor = strtok(NULL, ",");
+            veiculoMatch.preco = atof(strtok(NULL, ","));
 
             switch (escolhaFiltro) {
-                case 2:
-                    token = strtok(NULL, ";"); // Seleciona os modelos de veiculo no arquivo `veiculos_estoque.csv`
+                case 1: // Compara as marcas de veiculo no arquivo `veiculos_estoque.csv`
+                    if (strcmp(filtro, veiculoMatch.marca.nome) == 0) {
+                        sucessoBusca = true;
+                        veiculos[i] = veiculoMatch; // Adiciona ao vetor de objetos os veiculos da marca/modelo/cor digitada pelo usuario
+                        i++;
+                    }
                     break;
 
-                case 3:
-                    token = strtok(NULL, ";");
-                    token = strtok(NULL, ";"); // Seleciona as cores de veiculo no arquivo `veiculos_estoque.csv`
+                case 2: // Compara os modelos de veiculo no arquivo `veiculos_estoque.csv`
+                    if (strcmp(filtro, veiculoMatch.modelo) == 0) {
+                        sucessoBusca = true;
+                        veiculos[i] = veiculoMatch;
+                        i++;
+                    }
                     break;
-            }
 
-
-            if (strcmp(filtro, token)) {
-                sucessoBusca;
-                Veiculo veiculoMatch; // Armazena os dados do veiculo do filtro correspondente em um "objeto" da "classe" `Veiculo`
-
-                //veiculoMatch.marca = strtok(aux, ";");
-                veiculoMatch.modelo = strtok(NULL, ";");
-                veiculoMatch.cor = strtok(NULL, ";");
-                veiculoMatch.preco = atof(strtok(NULL, ";"));
-
-                veiculos[i] = veiculoMatch; // Adiciona ao vetor de objetos os veiculos da marca/modelo/cor digitada pelo usuário
-                i++;
+                case 3: // Compara as cores de veiculo no arquivo `veiculos_estoque.csv`
+                    if (strcmp(filtro, veiculoMatch.cor) == 0) {
+                        sucessoBusca = true;
+                        veiculos[i] = veiculoMatch;
+                        i++;
+                    }
+                    break;
             }
         }
+        free(filtro);
     }
+    free(opcaoFiltro);
 
     if (!sucessoBusca) // Se array de structs estiver vazio, exibir uma mensagem
         printf ("\n\nA busca nao retornou nenhum resultado no banco de dados.\n\n");

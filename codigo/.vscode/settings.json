@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "buscar.h": "c",
+        "stdbool.h": "c",
+        "ordenar.h": "c"
+    }
+}
