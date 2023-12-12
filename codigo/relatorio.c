@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+#include "relatorio.h"
 
 #define MAX_TRANSACOES 100
 
@@ -68,7 +70,7 @@ void escreverTransacoes(const char *nomeArquivo, struct Transacao transacoes[], 
     fclose(arquivo);
 }
 
-int main()
+void gerarExtrato()
 {
     struct Transacao transacoesVenda[MAX_TRANSACOES];
     struct Transacao transacoesCompra[MAX_TRANSACOES];
@@ -84,43 +86,47 @@ int main()
         scanf("%s", dataBusca);
 
         // Lendo arquivos
-        tamanhoVendas = lerTransacoesCSV("../arquivos/historico_vendas.csv", transacoesVenda);
+        tamanhoVendas = lerTransacoesCSV("./arquivos/historico_vendas.csv", transacoesVenda);
 
-        tamanhoCompras = lerTransacoesCSV("../arquivos/historico_compras.csv", transacoesCompra);
+        tamanhoCompras = lerTransacoesCSV("./arquivos/historico_compras.csv", transacoesCompra);
 
         // Escrevendo no relatorio o resultado
-        escreverTransacoes("../arquivos/relatorio.csv", transacoesVenda, tamanhoVendas, dataBusca, 'V');
+        escreverTransacoes("./arquivos/relatorio.csv", transacoesVenda, tamanhoVendas, dataBusca, 'V');
 
-        escreverTransacoes("../arquivos/relatorio.csv", transacoesCompra, tamanhoCompras, dataBusca, 'C');
+        escreverTransacoes("./arquivos/relatorio.csv", transacoesCompra, tamanhoCompras, dataBusca, 'C');
 
         // Pesquisa nas vendas pela data inserida
+        bool encontrouVendas = false;
         printf("Transações de vendas na data %s:\n", dataBusca);
         for (int i = 0; i < tamanhoVendas; i++)
         {
             if (strcmp(transacoesVenda[i].data, dataBusca) == 0)
             {
                 printf("Tipo: %c, Valor: %.2f, Data: %s\n", transacoesVenda[i].tipo, transacoesVenda[i].valor, transacoesVenda[i].data);
-            }
-            else
-            {
-                printf("Erro: data sem registros");
-                return 1;
+                encontrouVendas = true;
             }
         }
 
+        if (!encontrouVendas)
+        {
+            printf("Erro: Nenhuma transação de vendas encontrada para a data %s\n", dataBusca);
+        }
+
         // Pesquisa nas compras pela data inserida
+        bool encontrouCompras = false;
         printf("\nTransações de compras na data %s:\n", dataBusca);
         for (int i = 0; i < tamanhoCompras; i++)
         {
             if (strcmp(transacoesCompra[i].data, dataBusca) == 0)
             {
                 printf("Tipo: %c, Valor: %.2f, Data: %s\n", transacoesCompra[i].tipo, transacoesCompra[i].valor, transacoesCompra[i].data);
+                encontrouCompras = true;
             }
-            else
-            {
-                printf("Erro: data sem registros");
-                return 1;
-            }
+        }
+
+        if (!encontrouCompras)
+        {
+            printf("Erro: Nenhuma transação de compras encontrada para a data %s\n", dataBusca);
         }
 
         printf("Deseja fazer outra pesquisa? (S/N): ");
@@ -128,5 +134,5 @@ int main()
 
     } while (continuar == 'S' || continuar == 's');
 
-    return 0;
+    return;
 }
