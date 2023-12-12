@@ -6,6 +6,7 @@
 #include "utils.h"
 #include "structs.h"
 #include "buscar.h"
+#include "relatorio.h"
 
 int main () {
     printf("VrumVrum Corporation ©\n\n");
@@ -45,7 +46,7 @@ int main () {
                     break;
 
                 case 4:
-                    //gerarExtrato();
+                    gerarExtrato();
                     break;
 
                 case 5:
