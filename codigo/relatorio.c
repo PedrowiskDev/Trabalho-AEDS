@@ -10,11 +10,14 @@
 struct Transacao
 {
     char tipo; // 'C' para compra, 'V' para venda
+    char marca[20];
+    char modelo[20];
+    char cor[20];
     float valor;
     char data[11];
 };
 
-// Função para ler transações de um arquivo CSV e preencher a estrutura de transações
+// Função para ler transações de um arquivo .csv e preencher a estrutura de transações
 int lerTransacoesCSV(const char *nomeArquivo, struct Transacao transacoes[])
 {
     FILE *arquivo = fopen(nomeArquivo, "r");
@@ -30,7 +33,7 @@ int lerTransacoesCSV(const char *nomeArquivo, struct Transacao transacoes[])
     while (fgets(linha, sizeof(linha), arquivo) && i < MAX_TRANSACOES)
     {
         // O arquivo CSV tem o formato: tipo,valor,data
-        sscanf(linha, "%c,%f,%10s", &transacoes[i].tipo, &transacoes[i].valor, transacoes[i].data);
+        sscanf(linha, "%c,%19[^,],%19[^,],%19[^,],%f,%10s", &transacoes[i].tipo, transacoes[i].marca, transacoes[i].modelo, transacoes[i].cor, &transacoes[i].valor, transacoes[i].data);
         i++;
     }
 
@@ -57,13 +60,13 @@ void escreverTransacoes(const char *nomeArquivo, struct Transacao transacoes[], 
         fprintf(arquivo, "Vendas feitas na data: %s\n", dataBusca);
     }
 
-    fprintf(arquivo, "Tipo,Valor,Data\n");
+    fprintf(arquivo, "Tipo,Marca,Modelo,Cor,Valor,Data\n");
 
     for (int i = 0; i < tamanho; i++)
     {
         if (strcmp(transacoes[i].data, dataBusca) == 0)
         {
-            fprintf(arquivo, "%c,%.2f,%s\n", transacoes[i].tipo, transacoes[i].valor, transacoes[i].data);
+            fprintf(arquivo, "%c,%s,%s,%s,%.2f,%s\n", transacoes[i].tipo, transacoes[i].marca, transacoes[i].modelo, transacoes[i].cor, transacoes[i].valor, transacoes[i].data);
         }
     }
 
@@ -102,7 +105,7 @@ void gerarExtrato()
         {
             if (strcmp(transacoesVenda[i].data, dataBusca) == 0)
             {
-                printf("Tipo: %c, Valor: %.2f, Data: %s\n", transacoesVenda[i].tipo, transacoesVenda[i].valor, transacoesVenda[i].data);
+                printf("Marca: %s \nModelo: %s \nCor: %s \nValor: %.2f \nData: %s\n", transacoesVenda[i].marca, transacoesVenda[i].modelo, transacoesVenda[i].cor, transacoesVenda[i].valor, transacoesVenda[i].data);
                 encontrouVendas = true;
             }
         }
@@ -119,7 +122,7 @@ void gerarExtrato()
         {
             if (strcmp(transacoesCompra[i].data, dataBusca) == 0)
             {
-                printf("Tipo: %c, Valor: %.2f, Data: %s\n", transacoesCompra[i].tipo, transacoesCompra[i].valor, transacoesCompra[i].data);
+                printf("Marca: %s \nModelo: %s \nCor: %s \nValor: %.2f \nData: %s\n", transacoesCompra[i].marca, transacoesCompra[i].modelo, transacoesCompra[i].cor, transacoesCompra[i].valor, transacoesCompra[i].data);
                 encontrouCompras = true;
             }
         }
@@ -128,6 +131,12 @@ void gerarExtrato()
         {
             printf("Erro: Nenhuma transação de compras encontrada para a data %s\n", dataBusca);
         }
+
+        if (encontrouCompras && encontrouVendas != false)
+        {
+            printf("\n## Os dados foram salvos em relatorio.csv com sucesso! ##\n");
+        }
+        
 
         printf("Deseja fazer outra pesquisa? (S/N): ");
         scanf(" %c", &continuar);
