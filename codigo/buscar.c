@@ -65,9 +65,9 @@ Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao) {
 
             Veiculo veiculoMatch; // Armazena os dados do veiculo do filtro correspondente em um "objeto" da "classe" `Veiculo`
 
-            veiculoMatch.marca.nome = token;
-            veiculoMatch.modelo = strtok(NULL, ",");
-            veiculoMatch.cor = strtok(NULL, ",");
+            veiculoMatch.marca.nome = strdup(token); // Uso de `strdup` para duplicar strings e evitar que atributos utilizem os mesmos endereços de memória, já que `token` é um ponteiro
+            veiculoMatch.modelo = strdup(strtok(NULL, ","));
+            veiculoMatch.cor = strdup(strtok(NULL, ","));
             veiculoMatch.preco = atof(strtok(NULL, ","));
 
             switch (escolhaFiltro) {
@@ -75,8 +75,6 @@ Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao) {
                     if (strcmp(filtro, veiculoMatch.marca.nome) == 0) {
                         sucessoBusca = true;
                         veiculos[i] = veiculoMatch; // Adiciona ao vetor de objetos os veiculos da marca/modelo/cor digitada pelo usuario
-                        //printf("Match de marcas: %s, %s\n", filtro, veiculos[i].marca.nome);
-                        //printf("Veiculo registrado na posição %d: %s, %s, %s, %.2f\n", i, veiculos[i].marca.nome, veiculos[i].modelo, veiculos[i].cor, veiculos[i].preco);
                         i++;
                     }
                     break;
@@ -85,8 +83,6 @@ Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao) {
                     if (strcmp(filtro, veiculoMatch.modelo) == 0) {
                         sucessoBusca = true;
                         veiculos[i] = veiculoMatch;
-                        //printf("Match de modelos: %s, %s\n", filtro, veiculos[i].modelo);
-                        //printf("Veiculo registrado na posição %d: %s, %s, %s, %.2f\n", i, veiculos[i].marca.nome, veiculos[i].modelo, veiculos[i].cor, veiculos[i].preco);
                         i++;
                     }
                     break;
@@ -95,25 +91,19 @@ Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao) {
                     if (strcmp(filtro, veiculoMatch.cor) == 0) {
                         sucessoBusca = true;
                         veiculos[i] = veiculoMatch;
-                        //printf("Match de cores: %s, %s\n", filtro, veiculos[i].cor);
-                        //printf("Veiculo registrado na posição %d: %s, %s, %s, %.2f\n", i, veiculos[i].marca.nome, veiculos[i].modelo, veiculos[i].cor, veiculos[i].preco);
-
                         i++;
                     }
                     break;
             }
-            for (int j = 0; j < 3; j++)
-                printf("Veiculo registrado na posição %d: %s, %s, %s, %.2f\n", j, veiculos[j].marca.nome, veiculos[j].modelo, veiculos[j].cor, veiculos[j].preco);
         }
         free(filtro);
     }
     free(opcaoFiltro);
 
     if (!sucessoBusca) // Se array de structs estiver vazio, exibir uma mensagem
-        printf ("A busca nao retornou nenhum resultado no banco de dados.\n\n");
+        printf ("A busca nao retornou nenhum resultado do banco de dados.\n\n");
     else {
         if (opcaoOperacao == 1 || opcaoOperacao == 2) {
-            printf("\nBusca retornou %s com sucesso!\n\n", veiculos[0].modelo);
             ordenar(veiculos, cancelarOperacao);
         }
     }
