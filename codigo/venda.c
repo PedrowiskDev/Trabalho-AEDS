@@ -56,7 +56,7 @@ if (!cancelarOperacao && resultadoBusca != NULL) {
         scanf("%d", &escolha);
 
         if (escolha < 0 || escolha > quantidadeEncontrada) {
-            printf("Escolha inválida. Operação cancelada.\n");
+            printf("Escolha inválida. Operacao cancelada.\n");
             return;
         }
 

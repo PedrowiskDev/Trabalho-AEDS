@@ -46,9 +46,9 @@ Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao, int *posicoesPreench
     char aux[255];
     bool sucessoBusca = false;
 
-    FILE *veiculos_estoque = fopen ("./arquivos/veiculos_estoque.csv", "r");
+    FILE *veiculos_oferta = fopen ("./arquivos/veiculos_oferta.csv", "r");
 
-    if (veiculos_estoque == NULL) {
+    if (veiculos_oferta == NULL) {
         printf("Ocorreu um erro ao abrir o arquivo.");
         exit (EXIT_FAILURE);
     } else {
@@ -60,7 +60,7 @@ Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao, int *posicoesPreench
         fflush(stdin);
         limpar();
 
-        while(fgets(aux, sizeof(aux), veiculos_estoque) != NULL) { // Percorrer o arquivo procurando por strings que correspondam ao que o usuario digitou
+        while(fgets(aux, sizeof(aux), veiculos_oferta) != NULL) { // Percorrer o arquivo procurando por strings que correspondam ao que o usuario digitou
             char *token = strtok(aux, ",");
 
             Veiculo veiculoMatch; // Armazena os dados do veiculo do filtro correspondente em um "objeto" da "classe" `Veiculo`
@@ -71,7 +71,7 @@ Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao, int *posicoesPreench
             veiculoMatch.preco = atof(strtok(NULL, ","));
 
             switch (escolhaFiltro) {
-                case 1: // Compara as marcas de veiculo no arquivo `veiculos_estoque.csv`
+                case 1: // Compara as marcas de veiculo no arquivo `veiculos_oferta.csv`
                     if (strcmp(filtro, veiculoMatch.marca.nome) == 0) {
                         sucessoBusca = true;
                         veiculos[i] = veiculoMatch; // Adiciona ao vetor de objetos os veiculos da marca/modelo/cor digitada pelo usuario
@@ -79,7 +79,7 @@ Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao, int *posicoesPreench
                     }
                     break;
 
-                case 2: // Compara os modelos de veiculo no arquivo `veiculos_estoque.csv`
+                case 2: // Compara os modelos de veiculo no arquivo `veiculos_oferta.csv`
                     if (strcmp(filtro, veiculoMatch.modelo) == 0) {
                         sucessoBusca = true;
                         veiculos[i] = veiculoMatch;
@@ -87,7 +87,7 @@ Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao, int *posicoesPreench
                     }
                     break;
 
-                case 3: // Compara as cores de veiculo no arquivo `veiculos_estoque.csv`
+                case 3: // Compara as cores de veiculo no arquivo `veiculos_oferta.csv`
                     if (strcmp(filtro, veiculoMatch.cor) == 0) {
                         sucessoBusca = true;
                         veiculos[i] = veiculoMatch;
@@ -105,12 +105,12 @@ Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao, int *posicoesPreench
         printf ("A busca nao retornou nenhum resultado do banco de dados.\n\n");
     else {
         if (opcaoOperacao == 1 || opcaoOperacao == 2) {
-            ordenar(veiculos, cancelarOperacao);
+            ordenar(veiculos, cancelarOperacao, *posicoesPreenchidasVeiculos);
         }
     }
 
-    fflush(veiculos_estoque);
-    fclose(veiculos_estoque);
+    fflush(veiculos_oferta);
+    fclose(veiculos_oferta);
 
     return veiculos;
 }

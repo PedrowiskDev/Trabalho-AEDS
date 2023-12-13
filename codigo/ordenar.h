@@ -9,6 +9,6 @@
 #include "utils.h"
 #include "structs.h"
 
-void ordenar (Veiculo *veiculos, bool *cancelarOperacao);
+void ordenar (Veiculo *veiculos, bool *cancelarOperacao, int n);
 
 #endif

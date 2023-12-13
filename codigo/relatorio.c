@@ -100,7 +100,7 @@ void gerarExtrato()
 
         // Pesquisa nas vendas pela data inserida
         bool encontrouVendas = false;
-        printf("Transações de vendas na data %s:\n", dataBusca);
+        printf("Transacoes de vendas na data %s:\n", dataBusca);
         for (int i = 0; i < tamanhoVendas; i++)
         {
             if (strcmp(transacoesVenda[i].data, dataBusca) == 0)
@@ -112,12 +112,12 @@ void gerarExtrato()
 
         if (!encontrouVendas)
         {
-            printf("Erro: Nenhuma transação de vendas encontrada para a data %s\n", dataBusca);
+            printf("Erro: Nenhuma transacao de vendas encontrada para a data %s\n", dataBusca);
         }
 
         // Pesquisa nas compras pela data inserida
         bool encontrouCompras = false;
-        printf("\nTransações de compras na data %s:\n", dataBusca);
+        printf("\nTransacoes de compras na data %s:\n", dataBusca);
         for (int i = 0; i < tamanhoCompras; i++)
         {
             if (strcmp(transacoesCompra[i].data, dataBusca) == 0)
@@ -129,7 +129,7 @@ void gerarExtrato()
 
         if (!encontrouCompras)
         {
-            printf("Erro: Nenhuma transação de compras encontrada para a data %s\n", dataBusca);
+            printf("Erro: Nenhuma transacao de compras encontrada para a data %s\n", dataBusca);
         }
 
         if (encontrouCompras && encontrouVendas != false)
