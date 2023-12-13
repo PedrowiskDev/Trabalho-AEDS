@@ -2,14 +2,14 @@
 #define STRUCTS_H
 
 typedef struct {
-    char nome[255];
+    char *nome;
     float taxa;
 } Marca;
 
 typedef struct {
     Marca marca;
-    char modelo[255];
-    char cor[255];
+    char *modelo;
+    char *cor;
     float preco;
 } Veiculo;
 
