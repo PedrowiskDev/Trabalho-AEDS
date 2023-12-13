@@ -1,6 +1,6 @@
 #include "buscar.h"
 
-Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao, int *posicoesPreenchidasVeiculos) {
+Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao, int *posicoesPreenchidasVeiculos, const char *nomeArquivo) {
     bool escolhaValida = false;
 
     printf("1. Marca\n");
@@ -46,7 +46,7 @@ Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao, int *posicoesPreench
     char aux[255];
     bool sucessoBusca = false;
 
-    FILE *veiculos_oferta = fopen ("./arquivos/veiculos_oferta.csv", "r");
+    FILE *veiculos_oferta = fopen (nomeArquivo, "r");
 
     if (veiculos_oferta == NULL) {
         printf("Ocorreu um erro ao abrir o arquivo.");

@@ -1,8 +1,67 @@
 #include "venda.h"
 
+bool marcaEhUltimoVeiculo(const char *marca) {
+    FILE *veiculos_estoque = fopen("./arquivos/veiculos_estoque.csv", "r");
+    if (veiculos_estoque == NULL) {
+        printf("Erro ao abrir o arquivo de estoque.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    char linha[1024];
+    bool ultimaMarca = true;
+
+    while (fgets(linha, sizeof(linha), veiculos_estoque) != NULL) {
+        char *token = strtok(linha, ",");
+        if (strcmp(marca, strdup(token)) == 0) {
+            ultimaMarca = false; // Marca found, not the last one
+        }
+    }
+
+    fclose(veiculos_estoque);
+    return ultimaMarca;
+}
+
+void removerMarca(const char* marca) {
+    FILE* arquivoMarcas = fopen ("./arquivos/marcas.csv", "r");
+    if (arquivoMarcas == NULL) {
+        printf("Erro ao abrir o arquivo de marcas.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // Abrir um novo arquivo temporário para escrita
+    FILE* arquivoTemp = fopen ("./arquivos/temp_marcas.csv", "w");
+    if (arquivoTemp == NULL) {
+        fclose(arquivoMarcas);
+        printf("Erro ao abrir o arquivo temporario.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // Copiar as marcas para o arquivo temporário, excluindo a marca desejada
+    char linha[1024];
+    while (fgets(linha, sizeof(linha), arquivoMarcas) != NULL) {
+        // Verificar se a linha contém a marca a ser removida
+        if (strstr(linha, marca) != NULL) {
+            continue;  // Ignorar a linha, pois é a marca que será removida
+        }
+
+        // Escrever a linha no arquivo temporário
+        fprintf(arquivoTemp, "%s", linha);
+    }
+
+    // Fechar os arquivos
+    fclose(arquivoMarcas);
+    fclose(arquivoTemp);
+
+    // Remover o arquivo original
+    remove("./arquivos/marcas.csv");
+
+    // Renomear o arquivo temporário para o nome original
+    rename("./arquivos/temp_marcas.csv", "./arquivos/marcas.csv");
+}
+
 void removerVeiculoEstoque(const char *marca, const char *modelo)
 {
-    FILE *arquivoEntrada = fopen("veiculos_estoque.csv", "r");
+    FILE *arquivoEntrada = fopen("./arquivos/veiculos_estoque.csv", "r");
     if (arquivoEntrada == NULL)
     {
         printf("Erro ao abrir o arquivo de estoque.\n");
@@ -10,11 +69,11 @@ void removerVeiculoEstoque(const char *marca, const char *modelo)
     }
 
     // Abrir um novo arquivo temporário para escrita
-    FILE *arquivoTemp = fopen("temp.csv", "w");
+    FILE *arquivoTemp = fopen("./arquivos/temp_vendas.csv", "w");
     if (arquivoTemp == NULL)
     {
         fclose(arquivoEntrada);
-        printf("Erro ao abrir o arquivo temporário.\n");
+        printf("Erro ao abrir o arquivo temporario.\n");
         exit(EXIT_FAILURE);
     }
 
@@ -23,10 +82,8 @@ void removerVeiculoEstoque(const char *marca, const char *modelo)
     while (fgets(linha, sizeof(linha), arquivoEntrada) != NULL)
     {
         // Verificar se a linha contém o veículo a ser removido
-        if (strstr(linha, marca) != NULL && strstr(linha, modelo) != NULL)
-        {
+        if (strstr(linha, modelo) != NULL)
             continue; // Ignorar a linha, pois é o veículo que será removido
-        }
 
         // Escrever a linha no arquivo temporário
         fprintf(arquivoTemp, "%s", linha);
@@ -37,18 +94,18 @@ void removerVeiculoEstoque(const char *marca, const char *modelo)
     fclose(arquivoTemp);
 
     // Remover o arquivo original
-    remove("veiculos_estoque.csv");
+    remove("./arquivos/veiculos_estoque.csv");
 
     // Renomear o arquivo temporário para o nome original
-    rename("temp.csv", "veiculos_estoque.csv");
+    rename("./arquivos/temp_vendas.csv", "./arquivos/veiculos_estoque.csv");
 }
 
 void registrarVenda(const Veiculo *veiculo, float taxa)
 {
-    FILE *arquivoVendas = fopen("historico_vendas.csv", "a");
+    FILE *arquivoVendas = fopen("./arquivos/historico_vendas.csv", "a");
     if (arquivoVendas == NULL)
     {
-        printf("Erro ao abrir o arquivo de histórico de vendas.\n");
+        printf("Erro ao abrir o arquivo de historico de vendas.\n");
         exit(EXIT_FAILURE);
     }
 
@@ -76,41 +133,31 @@ void venda(Veiculo *veiculosEncontrados, int posicoesPreenchidasVeiculos)
         scanf("%f", &taxa);
         limpar();
 
-        printf("Veículos encontrados:\n");
+        printf("Veiculos encontrados:\n");
         for (int i = 0; i < posicoesPreenchidasVeiculos; i++)
-        {
             printf("%d. %s %s %s, %.2f\n", i + 1, veiculosEncontrados[i].marca.nome,
-                   veiculosEncontrados[i].modelo, veiculosEncontrados[i].cor, veiculosEncontrados[i].preco);
-        }
+                veiculosEncontrados[i].modelo, veiculosEncontrados[i].cor, veiculosEncontrados[i].preco);
 
-        printf("\nEscolha o número do veículo que deseja vender (ou 0 para cancelar): ");
+        printf("\nDigite o numero correspondente ao veiculo que deseja vender (ou 0 para cancelar): ");
         int escolha;
         scanf("%d", &escolha);
+        limpar();
 
         if (escolha < 0 || escolha > posicoesPreenchidasVeiculos)
         {
-            printf("Escolha inválida. Operação cancelada.\n");
+            printf("Escolha invalida. Operacao cancelada.\n");
             return;
-        }
-
-        if (escolha == 0)
-        {
+        } else if (escolha == 0) {
             printf("Venda cancelada.\n");
             return;
+        } else {
+            Veiculo veiculoVendido = veiculosEncontrados[escolha - 1];
+            if (marcaEhUltimoVeiculo(veiculoVendido.marca.nome))
+                removerMarca(veiculoVendido.marca.nome);
+
+            registrarVenda(&veiculoVendido, taxa);
+            removerVeiculoEstoque(veiculoVendido.marca.nome, veiculoVendido.modelo);
+            printf("Venda realizada com sucesso!\n");
         }
-
-        Veiculo veiculoVendido = veiculosEncontrados[escolha - 1];
-        registrarVenda(&veiculoVendido, taxa);
-        removerVeiculoEstoque(veiculoVendido.marca.nome, veiculoVendido.modelo);
-        printf("Venda realizada com sucesso!\n");
-    }
-
-    // Limpeza do array, se necessário
-    for (int i = 0; i < posicoesPreenchidasVeiculos; i++)
-    {
-        free(veiculosEncontrados[i].marca.nome);
-        free(veiculosEncontrados[i].modelo);
-        free(veiculosEncontrados[i].cor);
-        free(veiculosEncontrados[i].preco);
     }
 }

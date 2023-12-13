@@ -9,6 +9,6 @@
 #include "utils.h"
 #include "structs.h"
 
-void compra(Veiculo *veiculosRetornados, int posicoesPreenchidasVeiculos);
+void comprar(Veiculo *veiculosRetornados, int posicoesPreenchidasVeiculos);
 
 #endif

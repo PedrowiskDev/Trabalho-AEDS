@@ -1,11 +1,13 @@
 #include "comprar.h"
 
 void adicionarMarca(const char* marca) {
-    FILE* arquivoMarcas = fopen("marcas.csv", "r");
+    FILE* arquivoMarcas = fopen ("./arquivos/marcas.csv", "r");
     if (arquivoMarcas == NULL) {
         printf("Erro ao abrir o arquivo de marcas.\n");
         exit(EXIT_FAILURE);
     }
+
+    char novaMarca[255];
 
     // Verificar se a marca já existe no arquivo
     char linha[1024];
@@ -21,7 +23,7 @@ void adicionarMarca(const char* marca) {
     fclose(arquivoMarcas);
 
     // Abrir o arquivo de marcas para escrita (append)
-    arquivoMarcas = fopen("marcas.csv", "a");
+    arquivoMarcas = fopen ("./arquivos/marcas.csv", "a");
     if (arquivoMarcas == NULL) {
         printf("Erro ao abrir o arquivo de marcas para escrita.\n");
         exit(EXIT_FAILURE);
@@ -34,46 +36,8 @@ void adicionarMarca(const char* marca) {
     fclose(arquivoMarcas);
 }
 
-void removerMarca(const char* marca) {
-   FILE* arquivoMarcas = fopen("marcas.csv", "r");
-    if (arquivoMarcas == NULL) {
-        printf("Erro ao abrir o arquivo de marcas.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    // Abrir um novo arquivo temporário para escrita
-    FILE* arquivoTemp = fopen("temp_marcas.csv", "w");
-    if (arquivoTemp == NULL) {
-        fclose(arquivoMarcas);
-        printf("Erro ao abrir o arquivo temporário.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    // Copiar as marcas para o arquivo temporário, excluindo a marca desejada
-    char linha[1024];
-    while (fgets(linha, sizeof(linha), arquivoMarcas) != NULL) {
-        // Verificar se a linha contém a marca a ser removida
-        if (strstr(linha, marca) != NULL) {
-            continue;  // Ignorar a linha, pois é a marca que será removida
-        }
-
-        // Escrever a linha no arquivo temporário
-        fprintf(arquivoTemp, "%s", linha);
-    }
-
-    // Fechar os arquivos
-    fclose(arquivoMarcas);
-    fclose(arquivoTemp);
-
-    // Remover o arquivo original
-    remove("marcas.csv");
-
-    // Renomear o arquivo temporário para o nome original
-    rename("temp_marcas.csv", "marcas.csv");
-}
-
 void adicionarVeiculoEstoque(const Veiculo* veiculo) {
-    FILE* arquivoEstoque = fopen("veiculos_estoque.csv", "a");
+    FILE* arquivoEstoque = fopen ("./arquivos/veiculos_estoque.csv", "a");
     if (arquivoEstoque == NULL) {
         printf("Erro ao abrir o arquivo de estoque.\n");
         exit(EXIT_FAILURE);
@@ -81,22 +45,22 @@ void adicionarVeiculoEstoque(const Veiculo* veiculo) {
 
     // Escrever o veículo no arquivo
     fprintf(arquivoEstoque, "%s,%s,%s,%.2f\n", veiculo->marca.nome,
-            veiculo->modelo, veiculo->cor, veiculo->preco);
+        veiculo->modelo, veiculo->cor, veiculo->preco);
 
     // Fechar o arquivo
     fclose(arquivoEstoque);
 }
 
 
-void removerVeiculoOferta(const char* marca, const char* modelo) {
-    FILE* arquivoEntrada = fopen("veiculos_oferta.csv", "r");
+void removerVeiculoOferta(char* marca, char* modelo) {
+    FILE* arquivoEntrada = fopen ("./arquivos/veiculos_oferta.csv", "r");
     if (arquivoEntrada == NULL) {
         printf("Erro ao abrir o arquivo de oferta.\n");
         exit(EXIT_FAILURE);
     }
 
     // Abrir um novo arquivo temporário para escrita
-    FILE* arquivoTemp = fopen("temp_oferta.csv", "w");
+    FILE* arquivoTemp = fopen ("./arquivos/temp_oferta.csv", "w");
     if (arquivoTemp == NULL) {
         fclose(arquivoEntrada);
         printf("Erro ao abrir o arquivo temporário.\n");
@@ -107,7 +71,7 @@ void removerVeiculoOferta(const char* marca, const char* modelo) {
     char linha[1024];
     while (fgets(linha, sizeof(linha), arquivoEntrada) != NULL) {
         // Verificar se a linha contém o veículo a ser removido
-        if (strstr(linha, marca) != NULL && strstr(linha, modelo) != NULL) {
+        if (strstr(linha, modelo) != NULL) {
             continue;  // Ignorar a linha, pois é o veículo que será removido
         }
 
@@ -120,14 +84,14 @@ void removerVeiculoOferta(const char* marca, const char* modelo) {
     fclose(arquivoTemp);
 
     // Remover o arquivo original
-    remove("veiculos_oferta.csv");
+    remove("./arquivos/veiculos_oferta.csv");
 
     // Renomear o arquivo temporário para o nome original
-    rename("temp_oferta.csv", "veiculos_oferta.csv");
+    rename("./arquivos/temp_oferta.csv", "./arquivos/veiculos_oferta.csv");
 }
 
 void registrarCompra(const Veiculo* veiculo) {
-    FILE* arquivoCompras = fopen("historico_compras.csv", "a");
+    FILE* arquivoCompras = fopen ("./arquivos/historico_compras.csv", "a");
     if (arquivoCompras == NULL) {
         printf("Erro ao abrir o arquivo de historico de compras.\n");
         exit(EXIT_FAILURE);
@@ -148,43 +112,40 @@ void registrarCompra(const Veiculo* veiculo) {
 
 void comprar(Veiculo *veiculosRetornados, int posicoesPreenchidasVeiculos) {
     if (posicoesPreenchidasVeiculos == 0) {
-        printf("Nenhum veículo encontrado para compra.\n");
+        printf("Nenhum veiculo encontrado para compra.\n");
         return;
     }
 
-    printf("Veículos encontrados:\n");
+    printf("Veiculos encontrados:\n");
     for (int i = 0; i < posicoesPreenchidasVeiculos; i++) {
         printf("%d. %s %s %s, %.2f\n", i + 1, veiculosRetornados[i].marca.nome,
             veiculosRetornados[i].modelo, veiculosRetornados[i].cor, veiculosRetornados[i].preco);
     }
 
-    printf("\nEscolha o numero do veiculos que deseja comprar (ou 0 para cancelar): ");
+    printf("\nDigite o numero correspondente ao veiculo que deseja comprar (ou 0 para cancelar): ");
     int escolha;
     scanf("%d", &escolha);
+    limpar();
 
     if (escolha < 0 || escolha > posicoesPreenchidasVeiculos) {
-        printf("Escolha invalida. Operação cancelada.\n");
+        printf("Escolha invalida. Operacao cancelada.\n");
         return;
-    }
-
-    if (escolha == 0) {
+    } else if (escolha == 0) {
         printf("Compra cancelada.\n");
         return;
+    } else {
+        Veiculo veiculoComprado = veiculosRetornados[escolha - 1];
+        // Adiciona a marca ao arquivo marcas.csv se necessário
+        adicionarMarca(veiculoComprado.marca.nome);
+
+        // Adiciona o veículo ao estoque
+        adicionarVeiculoEstoque(&veiculoComprado);
+
+        // Remove o veículo da oferta
+        removerVeiculoOferta(veiculoComprado.marca.nome, veiculoComprado.modelo);
+
+        // Registra a compra no histórico
+        registrarCompra(&veiculoComprado);
+        printf("Compra realizada com sucesso!\n");
     }
-
-    Veiculo veiculoComprado = veiculosRetornados[escolha - 1];
-    
-    // Adiciona a marca ao arquivo marcas.csv se necessário
-    adicionarMarca(veiculoComprado.marca.nome);
-
-    // Adiciona o veículo ao estoque
-    adicionarVeiculoEstoque(&veiculoComprado);
-
-    // Remove o veículo da oferta
-    removerVeiculoOferta(veiculoComprado.marca.nome veiculoComprado.modelo);
-
-    // Registra a compra no histórico
-    registrarCompra(&veiculoComprado);
-
-    printf("Compra realizada com sucesso!\n");
 }

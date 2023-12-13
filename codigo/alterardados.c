@@ -8,8 +8,8 @@ void alterarDados(Veiculo *veiculos, int posicoesPreenchidasVeiculos) {
 
     printf("Veículos encontrados:\n");
     for (int i = 0; i < posicoesPreenchidasVeiculos; i++) {
-        printf("%d. %s %s %s, %.2f\n", i + 1, veiculos[i].marca.marca,
-               veiculos[i].modelo, veiculos[i].cor, veiculos[i].preco);
+        printf("%d. %s %s %s, %.2f\n", i + 1, veiculos[i].marca.nome,
+            veiculos[i].modelo, veiculos[i].cor, veiculos[i].preco);
     }
 
     printf("\nEscolha o número do veículo que deseja alterar (ou 0 para cancelar): ");

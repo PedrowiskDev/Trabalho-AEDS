@@ -10,6 +10,6 @@
 #include "structs.h"
 #include "ordenar.h"
 
-Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao, int *posicoesPreenchidasVeiculos);
+Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao, int *posicoesPreenchidasVeiculos, const char *nomeArquivo);
 
 #endif
