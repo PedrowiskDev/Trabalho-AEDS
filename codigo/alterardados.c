@@ -3,33 +3,30 @@
 #include <stdbool.h>
 #include <string.h>
 #include <time.h>
-#include "structs.h"
 
-void alterarDadosVeiculo(Veiculo* veiculo) {
-    printf("Digite os novos dados do veiculo:\n");
-    printf("Modelo: ");
-    scanf("%s", veiculo->modelo);
-    limpar();
-    printf("Cor: ");
-    scanf("%s", veiculo->cor);
-    limpar();
-    printf("Preco: ");
-    scanf("%f", &(veiculo->preco));
-    limpar();
-}
+typedef struct {
+    char marca[50];
+    char modelo[50];
+    float preco;
+} Veiculo;
 
-// Função para alterar taxas de uma marca
-void alterarTaxaMarca(Marca* marca) {
-    printf("Digite a nova taxa para a marca %s: ", marca->marca);
-    scanf("%f", &(marca->taxa));
-    limpar();
-}
+typedef struct {
+    char marca[50];
+    char modelo[50];
+    float preco;
+} Veiculo;
 
-// Função para buscar uma marca pelo nome
-Marca* buscarMarca(const char* nomeMarca) {
-    FILE* arquivoMarcas = fopen("marcas.csv", "r");
-    if (arquivoMarcas == NULL) {
-        printf("Erro ao abrir o arquivo de marcas.\n");
+void atualizarDadosVeiculo(const char* marca, const char* modelo, float novoPreco) {
+    FILE* arquivoEstoque = fopen("veiculos_estoque.csv", "r");
+    if (arquivoEstoque == NULL) {
+        printf("Erro ao abrir o arquivo de estoque.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    FILE* novoArquivoEstoque = fopen("temp_estoque.csv", "w");
+    if (novoArquivoEstoque == NULL) {
+        printf("Erro ao criar o arquivo temporário.\n");
+        fclose(arquivoEstoque);
         exit(EXIT_FAILURE);
     }
 
@@ -84,55 +81,18 @@ void salvarMarcasNoArquivo(const Marca* marcas, int numMarcas) {
 
 // Função para alterar dados do veículo e taxas
 void alterarDados() {
-    printf("1. Alterar dados de um veiculo\n");
-    printf("2. Alterar taxa de uma marca\n");
-    printf("3. Voltar\n");
-    printf("\nPor favor, escolha uma opcao: ");
+    bool cancelarOperacao = false;
+    Veiculo* resultadoBusca = buscar(3, &cancelarOperacao);
 
-    int escolha;
-    scanf("%d", &escolha);
-    limpar();
+    if (!cancelarOperacao && resultadoBusca != NULL) {
+        float novoPreco;
+        printf("Digite o novo preço: ");
+        scanf("%f", &novoPreco);
+        limpar();
 
-    switch (escolha) {
-        case 1: {
-            bool cancelarOperacao = false;
-            Veiculo* resultadoBusca = buscar(3, &cancelarOperacao);
-
-            if (!cancelarOperacao && resultadoBusca != NULL) {
-                alterarDadosVeiculo(resultadoBusca);
-                // Atualizar o veículo no arquivo de estoque
-                removerVeiculoEstoque(resultadoBusca->marca.marca, resultadoBusca->modelo);
-                adicionarVeiculoEstoque(*resultadoBusca);
-                printf("Dados do veiculo alterados com sucesso!\n");
-            }
-
-            free(resultadoBusca);
-            break;
-        }
-
-        case 2: {
-            char nomeMarca[50];
-            printf("Digite o nome da marca: ");
-            scanf("%s", nomeMarca);
-            limpar();
-
-            Marca* marca = buscarMarca(nomeMarca);
-
-            if (marca != NULL) {
-                alterarTaxaMarca(marca);
-                printf("Taxa da marca alterada com sucesso!\n");
-            } else {
-                printf("Marca nao encontrada.\n");
-            }
-            break;
-        }
-
-        case 3:
-        // Volta pro inicio
-            break;
-
-        default:
-            printf("Opcao invalida.\n");
-            break;
+        atualizarDadosVeiculo(resultadoBusca->marca, resultadoBusca->modelo, novoPreco);
+        printf("Dados atualizados com sucesso!\n");
     }
+
+    free(resultadoBusca);
 }

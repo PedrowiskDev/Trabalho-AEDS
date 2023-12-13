@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -6,6 +7,11 @@
 #include "structs.h"
 
 void registrarVenda(const Veiculo* veiculo, float taxa) {
+=======
+#include "venda.h"
+
+void registrarVenda(const Veiculo* veiculo) {
+>>>>>>> bf39c2adfe3fb88a73dc05740d993271f39f52b6
     FILE* arquivoVendas = fopen("historico_vendas.csv", "a");
     if (arquivoVendas == NULL) {
         printf("Erro ao abrir o arquivo de histórico de vendas.\n");
@@ -28,8 +34,12 @@ void registrarVenda(const Veiculo* veiculo, float taxa) {
 
 void venda(Veiculo veiculosEncontrados,int quantidadeEncontrada) {
     bool cancelarOperacao = false;
+<<<<<<< HEAD
     
     if (!cancelarOperacao && quantidadeEncontrada > 0) {
+=======
+if (!cancelarOperacao && resultadoBusca != NULL) {
+>>>>>>> bf39c2adfe3fb88a73dc05740d993271f39f52b6
         float taxa;
         printf("Digite a taxa de venda (em decimal): ");
         scanf("%f", &taxa);

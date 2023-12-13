@@ -7,6 +7,9 @@
 #include "structs.h"
 #include "buscar.h"
 #include "relatorio.h"
+#include "comprar.h"
+#include "venda.h"
+#include "alterardados.h"
 
 int main () {
     printf("VrumVrum Corporation ©\n\n");
@@ -34,7 +37,11 @@ int main () {
         if (!cancelarOperacao) {
             switch(opcao) {
                 case 1:
+<<<<<<< HEAD
                     compra(resultadoBusca);;
+=======
+                    comprar(resultadoBusca);
+>>>>>>> bf39c2adfe3fb88a73dc05740d993271f39f52b6
                     break;
 
                 case 2:
@@ -55,13 +62,12 @@ int main () {
 
                 case 6:
                     free(resultadoBusca);
-                    printf("Saindo... Digite Enter para sair.");
-                    getchar();
+                    printf("Saindo...");
                     exit(EXIT_SUCCESS);
                     break;
 
                 default:
-                    printf("Opcao inválida: por favor, digite um número entre 1 e 6 que corresponda à opcao desejada.\n\n");
+                    printf("Opcao invalida: por favor, digite um numero entre 1 e 6 que corresponda a opcao desejada.\n\n");
                     break;
             }
         }

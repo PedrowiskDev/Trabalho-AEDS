@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "stdbool.h": "c"
+        "buscar.h": "c",
+        "stdbool.h": "c",
+        "ordenar.h": "c",
+        "venda.h": "c"
     }
 }
