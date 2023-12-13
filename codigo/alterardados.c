@@ -1,98 +1,56 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <time.h>
+#include "alterardados.h"
 
-typedef struct {
-    char marca[50];
-    char modelo[50];
-    float preco;
-} Veiculo;
-
-typedef struct {
-    char marca[50];
-    char modelo[50];
-    float preco;
-} Veiculo;
-
-void atualizarDadosVeiculo(const char* marca, const char* modelo, float novoPreco) {
-    FILE* arquivoEstoque = fopen("veiculos_estoque.csv", "r");
-    if (arquivoEstoque == NULL) {
-        printf("Erro ao abrir o arquivo de estoque.\n");
-        exit(EXIT_FAILURE);
+void alterarDados(Veiculo *veiculos, int posicoesPreenchidasVeiculos) {
+    if (posicoesPreenchidasVeiculos == 0) {
+        printf("Nenhum veículo encontrado para alteração.\n");
+        return;
     }
 
-    FILE* novoArquivoEstoque = fopen("temp_estoque.csv", "w");
-    if (novoArquivoEstoque == NULL) {
-        printf("Erro ao criar o arquivo temporário.\n");
-        fclose(arquivoEstoque);
-        exit(EXIT_FAILURE);
+    printf("Veículos encontrados:\n");
+    for (int i = 0; i < posicoesPreenchidasVeiculos; i++) {
+        printf("%d. %s %s %s, %.2f\n", i + 1, veiculos[i].marca.marca,
+               veiculos[i].modelo, veiculos[i].cor, veiculos[i].preco);
     }
 
-    Marca* marcas = NULL;
-    char linha[1024];
-    int numMarcas = 0;
+    printf("\nEscolha o número do veículo que deseja alterar (ou 0 para cancelar): ");
+    int escolha;
+    scanf("%d", &escolha);
 
-    // Contar quantas marcas existem no arquivo para alocar memória
-    while (fgets(linha, sizeof(linha), arquivoMarcas) != NULL) {
-        numMarcas++;
+    if (escolha < 0 || escolha > posicoesPreenchidasVeiculos) {
+        printf("Escolha inválida. Operação cancelada.\n");
+        return;
     }
 
-    // Voltar ao início do arquivo para leitura
-    fseek(arquivoMarcas, 0, SEEK_SET);
-
-    // Alocar memória para as marcas
-    marcas = malloc(numMarcas * sizeof(Marca));
-
-    // Ler e armazenar as marcas
-    for (int i = 0; i < numMarcas; i++) {
-        fscanf(arquivoMarcas, "%s,%f\n", marcas[i].marca, &(marcas[i].taxa));
+    if (escolha == 0) {
+        printf("Alteração cancelada.\n");
+        return;
     }
 
-    fclose(arquivoMarcas);
+    Veiculo *veiculoAlterado = &veiculos[escolha - 1];
 
-    // Procurar a marca pelo nome
-    for (int i = 0; i < numMarcas; i++) {
-        if (strcmp(marcas[i].marca, nomeMarca) == 0) {
-            return &(marcas[i]);
-        }
+    printf("Novo modelo (pressione Enter para manter o mesmo): ");
+    char novoModelo[100];
+    scanf(" %[^\n]", novoModelo);
+    if (strlen(novoModelo) > 0) {
+        // O usuário inseriu um novo modelo
+        strcpy(veiculoAlterado->modelo, novoModelo);
     }
 
-    // Se a marca não for encontrada, liberar memória e retornar NULL
-    free(marcas);
-    return NULL;
-}
-
-// Função para salvar as marcas de volta no arquivo após as alterações
-void salvarMarcasNoArquivo(const Marca* marcas, int numMarcas) {
-    FILE* arquivoMarcas = fopen("marcas.csv", "w");
-    if (arquivoMarcas == NULL) {
-        printf("Erro ao abrir o arquivo de marcas.\n");
-        exit(EXIT_FAILURE);
+    printf("Nova cor (pressione Enter para manter a mesma): ");
+    char novaCor[100];
+    scanf(" %[^\n]", novaCor);
+    if (strlen(novaCor) > 0) {
+        // O usuário inseriu uma nova cor
+        strcpy(veiculoAlterado->cor, novaCor);
     }
 
-    for (int i = 0; i < numMarcas; i++) {
-        fprintf(arquivoMarcas, "%s,%.2f\n", marcas[i].marca, marcas[i].taxa);
+    printf("Novo preço (pressione Enter para manter o mesmo): ");
+    char novoPreco[100];
+    scanf(" %[^\n]", novoPreco);
+    if (strlen(novoPreco) > 0) {
+        // O usuário inseriu um novo preço
+        veiculoAlterado->preco = atof(novoPreco);
     }
 
-    fclose(arquivoMarcas);
-}
-
-// Função para alterar dados do veículo e taxas
-void alterarDados() {
-    bool cancelarOperacao = false;
-    Veiculo* resultadoBusca = buscar(3, &cancelarOperacao);
-
-    if (!cancelarOperacao && resultadoBusca != NULL) {
-        float novoPreco;
-        printf("Digite o novo preço: ");
-        scanf("%f", &novoPreco);
-        limpar();
-
-        atualizarDadosVeiculo(resultadoBusca->marca, resultadoBusca->modelo, novoPreco);
-        printf("Dados atualizados com sucesso!\n");
-    }
-
-    free(resultadoBusca);
+    printf("Dados do veículo alterados com sucesso!\n");
 }

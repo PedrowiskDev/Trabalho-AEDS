@@ -9,6 +9,6 @@
 #include "utils.h"
 #include "structs.h"
 
-void venda();
+void venda(Veiculo *veiculosRetornados, int posicoesPreenchidasVeiculos);
 
 #endif

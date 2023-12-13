@@ -9,6 +9,6 @@
 #include "utils.h"
 #include "structs.h"
 
-void alterarDados();
+void alterarDados(Veiculo *veiculosRetornados, int posicoesPreenchidasVeiculos);
 
 #endif
