@@ -28,24 +28,24 @@ int main () {
         scanf("%d", &opcao);
         limpar();
 
-        Veiculo *resultadoBusca;
+        Veiculo *veiculosRetornados;
+        int posicoesPreenchidasVeiculos = 0;
 
-        if (opcao == 1 || opcao == 2 || opcao == 3) {
-            resultadoBusca = buscar(opcao, &cancelarOperacao); // Filtragem e ordenacao de veiculos antes de realizar operacao
-        }
+        if (opcao == 1 || opcao == 2 || opcao == 3)
+            veiculosRetornados = buscar(opcao, &cancelarOperacao, &posicoesPreenchidasVeiculos); // Filtragem e ordenacao de veiculos antes de realizar operacao
 
         if (!cancelarOperacao) {
             switch(opcao) {
                 case 1:
-                    comprar(resultadoBusca);
+                    comprar(veiculosRetornados, posicoesPreenchidasVeiculos);
                     break;
 
                 case 2:
-                    venda(resultadoBusca);
+                    venda(veiculosRetornados, posicoesPreenchidasVeiculos);
                     break;
 
                 case 3:
-                    alterarDados(resultadoBusca);
+                    alterarDados(veiculosRetornados, posicoesPreenchidasVeiculos);
                     break;
 
                 case 4:
@@ -57,7 +57,7 @@ int main () {
                     break;
 
                 case 6:
-                    free(resultadoBusca);
+                    free(veiculosRetornados);
                     printf("Saindo...");
                     exit(EXIT_SUCCESS);
                     break;

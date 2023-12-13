@@ -1,6 +1,6 @@
 #include "buscar.h"
 
-Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao) {
+Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao, int *posicoesPreenchidasVeiculos) {
     bool escolhaValida = false;
 
     printf("1. Marca\n");
@@ -97,6 +97,7 @@ Veiculo *buscar (int opcaoOperacao, bool *cancelarOperacao) {
             }
         }
         free(filtro);
+        *posicoesPreenchidasVeiculos = i;
     }
     free(opcaoFiltro);
 
