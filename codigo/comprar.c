@@ -1,26 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <time.h>
+#include "comprar.h"
 
-typedef struct {
-    char marca[50];
-    char modelo[50];
-    float preco;
-} Veiculo;
-
-typedef struct {
-    char marca[50];
-    char modelo[50];
-    float preco;
-} Veiculo;
-
-
-
-void limpar() {
-    while (getchar() != '\n');
-}
 void adicionarVeiculoEstoque(Veiculo veiculo) {
     FILE* arquivoEstoque = fopen("veiculos_estoque.csv", "a");
     if (arquivoEstoque == NULL) {
@@ -83,7 +62,6 @@ void registrarCompra(const Veiculo* veiculo) {
 }
 void compra() {
     bool cancelarOperacao = false;
-    Veiculo* resultadoBusca = buscar(1, &cancelarOperacao);
 
     if (!cancelarOperacao && resultadoBusca != NULL) {
         Veiculo veiculoComprado = *resultadoBusca;

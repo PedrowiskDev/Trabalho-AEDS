@@ -7,6 +7,9 @@
 #include "structs.h"
 #include "buscar.h"
 #include "relatorio.h"
+#include "comprar.h"
+#include "venda.h"
+#include "alterardados.h"
 
 int main () {
     printf("VrumVrum Corporation ©\n\n");
@@ -34,7 +37,7 @@ int main () {
         if (!cancelarOperacao) {
             switch(opcao) {
                 case 1:
-                    compra();
+                    comprar();
                     break;
 
                 case 2:

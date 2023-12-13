@@ -2,6 +2,7 @@
     "files.associations": {
         "buscar.h": "c",
         "stdbool.h": "c",
-        "ordenar.h": "c"
+        "ordenar.h": "c",
+        "venda.h": "c"
     }
 }

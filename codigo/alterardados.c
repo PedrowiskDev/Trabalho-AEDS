@@ -1,23 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <time.h>
-
-typedef struct {
-    char marca[50];
-    char modelo[50];
-    float preco;
-} Veiculo;
-
-typedef struct {
-    char marca[50];
-    char modelo[50];
-    float preco;
-} Veiculo;
+#include "alterardados.h"
 
 void atualizarDadosVeiculo(const char* marca, const char* modelo, float novoPreco) {
-    FILE* arquivoEstoque = fopen("veiculos_estoque.csv", "r");
+    FILE* arquivoEstoque = fopen("./arquivos/veiculos_estoque.csv", "r");
     if (arquivoEstoque == NULL) {
         printf("Erro ao abrir o arquivo de estoque.\n");
         exit(EXIT_FAILURE);
@@ -52,7 +36,6 @@ void atualizarDadosVeiculo(const char* marca, const char* modelo, float novoPrec
 
 void alterarDados() {
     bool cancelarOperacao = false;
-    Veiculo* resultadoBusca = buscar(3, &cancelarOperacao);
 
     if (!cancelarOperacao && resultadoBusca != NULL) {
         float novoPreco;
@@ -60,9 +43,7 @@ void alterarDados() {
         scanf("%f", &novoPreco);
         limpar();
 
-        atualizarDadosVeiculo(resultadoBusca->marca, resultadoBusca->modelo, novoPreco);
+        atualizarDadosVeiculo(resultadoBusca.marca.nome, resultadoBusca.modelo, novoPreco);
         printf("Dados atualizados com sucesso!\n");
     }
-
-    free(resultadoBusca);
 }

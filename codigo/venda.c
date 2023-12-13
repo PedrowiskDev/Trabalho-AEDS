@@ -1,14 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <time.h>
-
-typedef struct {
-    char marca[50];
-    char modelo[50];
-    float preco;
-} Veiculo;
+#include "venda.h"
 
 void registrarVenda(const Veiculo* veiculo) {
     FILE* arquivoVendas = fopen("historico_vendas.csv", "a");
@@ -32,7 +22,6 @@ void registrarVenda(const Veiculo* veiculo) {
 
 void venda() {
     bool cancelarOperacao = false;
-    Veiculo* resultadoBusca = buscar(2, &cancelarOperacao);
 if (!cancelarOperacao && resultadoBusca != NULL) {
         float taxa;
         printf("Digite a taxa de compra (em decimal): ");
