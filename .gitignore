@@ -2,7 +2,7 @@
 output/
 
 # Relatorios
-
+relatorio.csv
 
 # Prerequisites
 *.d
